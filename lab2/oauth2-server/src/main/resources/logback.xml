@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n%ex{2}</pattern>
+    </layout>
+  </appender>
+
+  <appender name="file"
+    class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>logs/oauth2-server.log</file>
+    <append>false</append>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- daily rollover -->
+      <fileNamePattern>logs/mbti-webservices.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+
+      <!-- keep 10 days worth of history -->
+      <maxHistory>10</maxHistory>
+    </rollingPolicy>
+
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n%ex{2}</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="org.springframework.security" level="TRACE" additivity="false">
+    <appender-ref ref="console" />
+    <appender-ref ref="file" />
+  </logger>
+  
+  <logger name="org.springframework" level="DEBUG" additivity="false">
+    <appender-ref ref="console" />
+    <appender-ref ref="file" />
+  </logger>
+  
+  <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+    <appender-ref ref="console" />
+    <appender-ref ref="file" />
+  </logger>
+  
+  <root level="INFO">
+    <appender-ref ref="console" />
+    <appender-ref ref="file" />
+  </root>
+</configuration> 

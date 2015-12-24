@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+    http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+  ">
+
+  <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
+    <property name="driverClassName" value="${db.driver}" />
+    <property name="jdbcUrl" value="${db.url}" />
+    <property name="username" value="${db.user}" />
+    <property name="password" value="${db.password}" />
+  </bean>
+
+  <bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+    <property name="persistenceXmlLocation" value="classpath:/config/persistence.xml" />
+    <property name="persistenceUnitName" value="stink5.oauth2" />
+  
+    <property name="dataSource" ref="dataSource" />
+
+    <property name="jpaDialect">
+      <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
+    </property>
+    <property name="jpaVendorAdapter">
+      <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+        <property name="generateDdl" value="${jpa.generateDdl}" />
+        <property name="showSql" value="${jpa.showSql}"/>
+        <property name="databasePlatform" value="${jpa.databasePlatform}"/>
+        <property name="database" value="${jpa.database}"/>
+      </bean>
+    </property>
+    <property name="jpaProperties">
+      <props>
+        <prop key="format_sql">true</prop>
+        <prop key="use_sql_comments">true</prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+    <property name="entityManagerFactory" ref="emf" />
+  </bean>
+
+  <tx:annotation-driven transaction-manager="txManager" />
+  
+    <!-- Scan the repositories -->
+  <jpa:repositories
+    base-package="stink5.oauth2.lab2.repository"
+    entity-manager-factory-ref="emf"
+    transaction-manager-ref="txManager"
+  />
+
+</beans>

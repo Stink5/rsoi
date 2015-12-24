@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <title>Login Page</title>
+    <style>
+      .msg {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        color: #31708f;
+        background-color: #d9edf7;
+        border-color: #bce8f1;
+      }
+    </style>
+  </head>
+  <body>
+
+    <h2>Welcome : {{connected}} | <a href="javascript:formSubmit()"> Logout</a></h2>
+    {{#msg}}
+      <div class="msg">{{msg}}</div>
+    {{/msg}}
+    <form action="/user/save/{{connected}}" method="post">
+      <table>
+        <tr>
+          <td>Email:</td>
+          <td><input type="text" name="email" value="{{user.email}}"></input></td>
+        </tr>
+        <tr>
+          <td colspan="2"><input name="submit" type="submit" value="submit"></input></td>
+        </tr>
+      </table>
+    </form>
+
+    <form action="logout" method="post" id="logoutForm"></form>
+    <script>
+      function formSubmit() {
+          document.getElementById("logoutForm").submit();
+      }
+    </script>
+  </body>
+</html>
